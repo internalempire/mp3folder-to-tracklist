@@ -1,34 +1,34 @@
 # mp3folder-to-tracklist
 
-Genera un file `tracklist.txt` con i timestamp iniziali delle tracce MP3 presenti in una cartella.
+Generates a `tracklist.txt` file containing the start timestamp of each MP3 track in a folder.
 
-## Requisiti
+## Requirements
 
-- macOS (`afinfo` è incluso nel sistema)
+- macOS (`afinfo` is included with the operating system)
 - Bash
 
-## Utilizzo
+## Usage
 
-Rendi eseguibile lo script (solo la prima volta):
+Make the script executable (only required once):
 
 ```bash
 chmod +x mp3folder-to-tracklist.sh
 ```
 
-Eseguilo indicando la cartella che contiene gli MP3:
+Run it with the folder containing your MP3 files:
 
 ```bash
-./mp3folder-to-tracklist.sh "/percorso/della/cartella"
+./mp3folder-to-tracklist.sh "/path/to/your/folder"
 ```
 
-Se non specifichi una cartella, lo script usa quella corrente:
+If no folder is provided, the script uses the current directory:
 
 ```bash
 ./mp3folder-to-tracklist.sh
 ```
 
-Il risultato viene salvato come `tracklist.txt` nella cartella degli MP3. I file vengono ordinati alfabeticamente; nomi come `01 - Titolo.mp3`, `02 - Titolo.mp3` mantengono quindi l'ordine delle tracce.
+The result is saved as `tracklist.txt` inside the MP3 folder. Files are sorted alphabetically, so names such as `01 - Title.mp3` and `02 - Title.mp3` preserve the intended track order.
 
-## Pausa tra le tracce
+## Pauses between tracks
 
-Per impostazione predefinita viene aggiunto un secondo tra una traccia e la successiva. Modifica la variabile `PAUSA` all'inizio dello script per cambiare questo valore o impostalo a `0` per non aggiungere pause.
+By default, the script adds one second between consecutive tracks. Change the `PAUSA` variable at the beginning of the script to use a different value, or set it to `0` to disable pauses.
