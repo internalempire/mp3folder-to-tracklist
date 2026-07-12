@@ -1,4 +1,4 @@
-# mp3folder-to-tracklist
+# [VIBECODED] mp3folder-to-tracklist
 
 Generates a `tracklist.txt` file containing the start timestamp of each MP3 track in a folder.
 
