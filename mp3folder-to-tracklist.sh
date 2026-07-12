@@ -1,64 +1,64 @@
 #!/bin/bash
 
-# Secondi da aggiungere tra una traccia e la successiva.
-# Imposta 0 se non vuoi aggiungere pause.
-PAUSA=1
+# Seconds to add between consecutive tracks.
+# Set to 0 if you do not want to add pauses.
+PAUSE=1
 
-# Usa la cartella indicata come argomento,
-# oppure la cartella corrente.
-CARTELLA="${1:-.}"
+# Use the folder provided as an argument,
+# or the current folder if none is provided.
+FOLDER="${1:-.}"
 
-OUTPUT="$CARTELLA/tracklist.txt"
-tempo_totale=0
+OUTPUT="$FOLDER/tracklist.txt"
+total_time=0
 
-# Azzera il file di output.
+# Clear the output file.
 > "$OUTPUT"
 
-formatta_tempo() {
-    local totale=$1
-    local ore=$((totale / 3600))
-    local minuti=$(((totale % 3600) / 60))
-    local secondi=$((totale % 60))
+format_time() {
+    local total=$1
+    local hours=$((total / 3600))
+    local minutes=$(((total % 3600) / 60))
+    local seconds=$((total % 60))
 
-    if (( ore > 0 )); then
-        printf "%02d:%02d:%02d" "$ore" "$minuti" "$secondi"
+    if (( hours > 0 )); then
+        printf "%02d:%02d:%02d" "$hours" "$minutes" "$seconds"
     else
-        printf "%02d:%02d" "$minuti" "$secondi"
+        printf "%02d:%02d" "$minutes" "$seconds"
     fi
 }
 
-# Legge i file MP3 in ordine alfabetico.
-# Con nomi 01, 02, 03... corrisponde all'ordine delle tracce.
+# Read MP3 files in alphabetical order.
+# Names starting with 01, 02, 03... preserve the track order.
 while IFS= read -r -d '' file; do
 
-    nome=$(basename "$file" .mp3)
+    name=$(basename "$file" .mp3)
 
-    # Rimuove il prefisso iniziale, per esempio:
-    # "01 - Prima traccia" -> "Prima traccia"
-    titolo=$(printf '%s' "$nome" | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]*[-–—._)][[:space:]]*//')
+    # Remove the leading track number, for example:
+    # "01 - First track" -> "First track"
+    title=$(printf '%s' "$name" | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]*[-–—._)][[:space:]]*//')
 
-    timestamp=$(formatta_tempo "$tempo_totale")
-    printf "%s - %s\n" "$timestamp" "$titolo" >> "$OUTPUT"
+    timestamp=$(format_time "$total_time")
+    printf "%s - %s\n" "$timestamp" "$title" >> "$OUTPUT"
 
-    # afinfo restituisce la durata in secondi, anche con decimali.
-    durata=$(afinfo "$file" |
+    # afinfo returns the duration in seconds, including decimal values.
+    duration=$(afinfo "$file" |
         awk -F': ' '/estimated duration/ {
             printf "%.0f", $2
             exit
         }')
 
-    if [[ -z "$durata" ]]; then
-        echo "Errore: impossibile leggere la durata di $file" >&2
+    if [[ -z "$duration" ]]; then
+        echo "Error: unable to read the duration of $file" >&2
         exit 1
     fi
 
-    tempo_totale=$((tempo_totale + durata + PAUSA))
+    total_time=$((total_time + duration + PAUSE))
 
 done < <(
-    find "$CARTELLA" -maxdepth 1 -type f \
+    find "$FOLDER" -maxdepth 1 -type f \
         \( -iname "*.mp3" \) \
         -print0 |
     sort -z
 )
 
-echo "Tracklist generata: $OUTPUT"
+echo "Tracklist generated: $OUTPUT"

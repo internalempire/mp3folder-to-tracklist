@@ -31,4 +31,4 @@ The result is saved as `tracklist.txt` inside the MP3 folder. Files are sorted a
 
 ## Pauses between tracks
 
-By default, the script adds one second between consecutive tracks. Change the `PAUSA` variable at the beginning of the script to use a different value, or set it to `0` to disable pauses.
+By default, the script adds one second between consecutive tracks. Change the `PAUSE` variable at the beginning of the script to use a different value, or set it to `0` to disable pauses.
